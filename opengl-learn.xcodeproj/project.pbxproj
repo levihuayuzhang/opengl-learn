@@ -37,6 +37,7 @@
 		9914636D29563169005BAB3F /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../../../opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
 		9914636F295631B2005BAB3F /* libsoil2-debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsoil2-debug.a"; path = "../../../../../../../usr/local/lib/libsoil2-debug.a"; sourceTree = "<group>"; };
 		99146370295631B2005BAB3F /* libsoil2-debug.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsoil2-debug.dylib"; path = "../../../../../../../usr/local/lib/libsoil2-debug.dylib"; sourceTree = "<group>"; };
+		99146375295653B7005BAB3F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +60,7 @@
 		9914635329563025005BAB3F = {
 			isa = PBXGroup;
 			children = (
+				99146375295653B7005BAB3F /* README.md */,
 				9914635E29563025005BAB3F /* opengl-learn */,
 				9914635D29563025005BAB3F /* Products */,
 				991463662956310C005BAB3F /* Frameworks */,
