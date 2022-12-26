@@ -59,6 +59,7 @@
 //  glDrawArrays(GL_POINTS, 0, 1);
 //}
 
+
 #define numVAOs 1
 
 GLuint renderingProgram;
