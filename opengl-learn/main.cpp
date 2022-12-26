@@ -7,7 +7,6 @@
 #ifdef __APPLE__
 #define GL_DO_NOT_WARN_IF_MULTI_GL_VERSION_HEADERS_INCLUDED
 #endif
-
 #define GLEW_STATIC
 #include <GL/glew.h>
 #define GLFW_INCLUDE_GLCOREARB
@@ -32,7 +31,7 @@ int main(int argc, char** argv) {
     // force using newer version of OpenGL in MacOS
 #ifdef __APPLE__
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1); // highest for MacOS
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
