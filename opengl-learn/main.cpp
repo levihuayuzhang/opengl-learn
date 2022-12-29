@@ -5,6 +5,16 @@
 #define BUFFER_OFFSET(i) ((char *)NULL (i))
 #include <iostream>
 
+void ifMacos(void){
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    std::cout << "\n Running in MacOS...\n" << std::endl;
+#endif
+}
+
 static unsigned int CompileShader(unsigned int type, const std::string& source){
     unsigned int id = glCreateShader(type);
     const char* src = source.c_str();
@@ -49,9 +59,16 @@ void preTriangle (void){
             0.5f, -0.5f
     };
 
-    unsigned int buf;
-    glGenBuffers(1, &buf);
-    glBindBuffer(GL_ARRAY_BUFFER, buf);
+    // c++ in opengl 3.2 or newer require generate and bind vertex array
+    unsigned int vao; // vertex array
+    unsigned int vbo; // vertex buffer
+
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
@@ -59,7 +76,7 @@ void preTriangle (void){
 
     // Shaders
     std::string vShader =
-            "#version 460 core\n"
+            "#version 410 core\n"
             "\n"
             "layout (location = 0) in vec4 position;"
             "\n"
@@ -69,7 +86,7 @@ void preTriangle (void){
             "}\n";
 
     std::string fShader =
-            "#version 460 core\n"
+            "#version 410 core\n"
             "\n"
             "layout (location = 0) out vec4 color;"
             "\n"
@@ -95,10 +112,11 @@ void render(void){
 
 
 int main(int argc, char** argv) {
-
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }
+
+    ifMacos();
 
     // create window
     GLFWwindow *window;
