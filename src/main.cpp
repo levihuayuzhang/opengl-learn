@@ -1,3 +1,8 @@
+#ifdef __APPLE__
+#define GLFW_INCLUDE_GLCOREARB
+#define GLSILENCE_DEPRECATION
+#endif
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 #define GLFW_INCLUDE_GLCOREARB

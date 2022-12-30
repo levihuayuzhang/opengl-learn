@@ -7,3 +7,7 @@ OS:
 Graphic Card:
 - Nvidia RTX 3070ti (525.60.11) (OpenGL Version: 4.6.0)
 - M1 Max (4.1 Metal - 83)
+
+IDE:
+- Clion
+- Xcode
