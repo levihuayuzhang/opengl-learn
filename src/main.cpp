@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
     }
     glewExperimental = GL_TRUE;
 
-    std::cout << "Current OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "\nCurrent OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
     // prepare for rendering
     initWindow();
