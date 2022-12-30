@@ -1,6 +1,9 @@
 #ifdef __APPLE__
 #define GLFW_INCLUDE_GLCOREARB
-#define GLSILENCE_DEPRECATION
+#define GL_SILENCE_DEPRECATION
+#define GL_DO_NOT_WARN_IF_MULTI_GL_VERSION_HEADERS_INCLUDED
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
 #endif
 
 #define GLEW_STATIC
@@ -128,11 +131,11 @@ int main(int argc, char** argv) {
     window = glfwCreateWindow(600, 600, "Hello World", NULL, NULL);
     glfwMakeContextCurrent(window);
 
+    glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK){
         exit(EXIT_FAILURE);
     }
-    glewExperimental = GL_TRUE;
-
+    
     std::cout << "\nCurrent OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
     // prepare for rendering
