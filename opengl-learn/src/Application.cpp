@@ -84,7 +84,7 @@ void preTriangle(void) {
 
     // Shaders
     std::string vShader =
-        "#version 410 core\n"
+        "#version 460 core\n"
         "\n"
         "layout (location = 0) in vec4 position;"
         "\n"
@@ -94,7 +94,7 @@ void preTriangle(void) {
         "}\n";
 
     std::string fShader =
-        "#version 410 core\n"
+        "#version 460 core\n"
         "\n"
         "layout (location = 0) out vec4 color;"
         "\n"
