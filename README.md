@@ -1,5 +1,11 @@
 # Learning OpenGL
 
+# OS:
+Windows 11
+
+# IDE:
+Visual Studio
+
 # Dependencies:
 - [GLFW](https://www.glfw.org/download)
 - [GLEW](https://glew.sourceforge.net/index.html)
