@@ -8,7 +8,7 @@
 
 #define GLEW_STATIC
 #include <GL/glew.h>
-#define GLFW_INCLUDE_GLCOREARB
+// #define GLFW_INCLUDE_GLCOREARB
 #include <GLFW/glfw3.h>
 #define BUFFER_OFFSET(i) ((char *)NULL (i))
 #include <iostream>
