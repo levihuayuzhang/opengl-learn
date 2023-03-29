@@ -12,6 +12,14 @@
 #include <GLFW/glfw3.h>
 #define BUFFER_OFFSET(i) ((char *)NULL (i))
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+
+struct ShaderProgramSource {
+    std::string VertexSource;
+    std::string FragmentSource;
+};
 
 void ifMacos(void) {
 #ifdef __APPLE__
@@ -19,8 +27,35 @@ void ifMacos(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    std::cout << "\n Running in MacOS...\n" << std::endl;
+    std::cout <<  "\nRunning in MacOS...\n" << std::endl;
 #endif
+}
+
+static ShaderProgramSource ParseShader(const std::string& filepath) {
+    std::ifstream stream(filepath);
+
+    enum class ShaderType {
+        NONE = -1, VERTEX = 0, FRAGMENT = 1
+    };
+    
+    std::string line;
+    std::stringstream ss[2];
+    ShaderType type = ShaderType::NONE;
+    while (getline(stream, line)) {
+        if (line.find("#shader") != std::string::npos) {
+            if (line.find("vertex") != std::string::npos) {
+                // set mode to vertex
+                type = ShaderType::VERTEX;
+            } else if (line.find("fragment") != std::string::npos) {
+                // set mode to fragment
+                type = ShaderType::FRAGMENT;
+            }
+        } else {
+            ss[(int)type] << line << '\n';
+        }
+    }
+
+    return {ss[0].str(), ss[1].str() };
 }
 
 static unsigned int CompileShader(unsigned int type, const std::string& source) {
@@ -36,8 +71,8 @@ static unsigned int CompileShader(unsigned int type, const std::string& source) 
         int length;
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
         char* msg = (char*)alloca(length * sizeof(char)); \
-            glGetShaderInfoLog(id, length, &length, msg);
-        std::cout << (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment") << " Shader Compile Failed!!!" << std::endl;
+        glGetShaderInfoLog(id, length, &length, msg);
+        std::cout << (type == GL_VERTEX_SHADER ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER) <<  "Shader Compile Failed!!!" << std::endl;
         std::cout << msg << std::endl;
     }
 
@@ -54,8 +89,9 @@ static unsigned int CreateShader(const std::string& vShader, const std::string& 
     glLinkProgram(program);
     glValidateProgram(program);
 
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+//    glDeleteShader(vs);
+//    glDeleteShader(fs);
+//    glDeleteProgram();
 
     return program;
 }
@@ -82,28 +118,8 @@ void preTriangle(void) {
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-    // Shaders
-    std::string vShader =
-        "#version 410 core\n"
-        "\n"
-        "layout (location = 0) in vec4 position;"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = position;\n"
-        "}\n";
-
-    std::string fShader =
-        "#version 410 core\n"
-        "\n"
-        "layout (location = 0) out vec4 color;"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   color = vec4(0.0, 1.0, 0.0, 1.0);\n"
-        "}\n";
-
-    unsigned int shader = CreateShader(vShader, fShader);
+    ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
+    unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
     glUseProgram(shader);
 }
 
@@ -136,7 +152,7 @@ int main(int argc, char** argv) {
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "\nCurrent OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "Current OpenGL version:"  << glGetString(GL_VERSION) << std::endl;
 
     // prepare for rendering
     initWindow();
