@@ -27,7 +27,7 @@ void ifMacos(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    std::cout <<  "\nRunning in MacOS...\n" << std::endl;
+    std::cout <<  "Running in MacOS..." << std::endl;
 #endif
 }
 
@@ -96,27 +96,42 @@ static unsigned int CreateShader(const std::string& vShader, const std::string& 
     return program;
 }
 
-void preTriangle(void) {
-    float positions[6] = {
+void preSquare(void) {
+    float positions[] = {
             -0.5f, -0.5f,
-            0.0f, 0.5f,
-            0.5f, -0.5f
+            0.5f, -0.5f,
+            0.5f, 0.5f,
+//            0.5f, 0.5f,
+            -0.5f, 0.5f
+//            -0.5f, -0.5f
     };
 
-    // c++ in opengl 3.2 or newer require generate and bind vertex array
-    unsigned int vao; // vertex array
-    unsigned int vbo; // vertex buffer
+    // for index shader (saving memory)
+    unsigned int indices[] = {
+            0, 1, 2,
+            2, 3, 0
+    };
 
+    // c++ in opengl 3.2 or newer require generate and bind vertex array (core profile on Mac)
+    // vertex array
+    unsigned int vao;
     glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+    // vertex buffer
+    unsigned int vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+
+    // index shader (for saving memory) (reuse of vertex)
+    unsigned int ibo;
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
     ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
     unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
@@ -124,14 +139,16 @@ void preTriangle(void) {
 }
 
 void initWindow(void) {
-    preTriangle();
+//    preTriangle();
+    preSquare();
 }
 
 void render(void) {
     // Clear screen
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // draw index shader
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
 
@@ -144,7 +161,7 @@ int main(int argc, char** argv) {
 
     // create window
     GLFWwindow* window;
-    window = glfwCreateWindow(600, 600, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(600, 600, "OpenGL Learn", NULL, NULL);
     glfwMakeContextCurrent(window);
 
     glewExperimental = GL_TRUE;
